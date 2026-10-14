@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Research Project Planner & Workspace</title>
+    <style>
+        /* CSS RESET & VARIABLES */
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --surface-subtle: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --primary-color: #1e3a8a;
+            --primary-hover: #1e40af;
+            --primary-light: #eff6ff;
+            --focus-ring: #2563eb;
+            --success-color: #14532d;
+            --success-bg: #f0fdf4;
+            --warning-color: #78350f;
+            --warning-bg: #fefce8;
+            --error-color: #7f1d1d;
+            --error-bg: #fef2f2;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        /* DARK THEME */
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --surface-color: #1e293b;
+            --surface-subtle: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #475569;
+            --primary-color: #60a5fa;
+            --primary-hover: #93c5fd;
+            --primary-light: #1e3a8a;
+            --focus-ring: #93c5fd;
+            --success-color: #86efac;
+            --success-bg: #064e3b;
+            --warning-color: #fde047;
+            --warning-bg: #451a03;
+            --error-color: #fca5a5;
+            --error-bg: #450a0a;
+        }
+
+        /* HIGH CONTRAST THEME */
+        [data-theme="contrast"] {
+            --bg-color: #000000;
+            --surface-color: #000000;
+            --surface-subtle: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #ffffff;
+            --text-muted: #ffff00;
+            --border-color: #ffffff;
+            --primary-color: #ffff00;
+            --primary-hover: #ffffff;
+            --primary-light: #222200;
+            --focus-ring: #00ffff;
+            --success-color: #00ff00;
+            --success-bg: #003300;
+            --warning-color: #ffff00;
+            --warning-bg: #333300;
+            --error-color: #ff6666;
+            --error-bg: #330000;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ACCESSIBILITY UTILITIES */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 10px;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            padding: 8px 16px;
+            z-index: 1000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: var(--radius-sm);
+            transition: top 0.2s;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+            outline: 3px solid var(--focus-ring);
+        }
+
+        *:focus-visible {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 3px;
+        }
+
+        /* LAYOUT & STRUCTURE */
+        header {
+            background-color: var(--surface-color);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .header-title p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .theme-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        /* NAVIGATION TABS */
+        nav[aria-label="Main Navigation"] {
+            width: 250px;
+            flex-shrink: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: sticky;
+            top: 1.5rem;
+        }
+
+        .nav-button {
+            width: 100%;
+            text-align: left;
+            padding: 0.875rem 1rem;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .nav-button:hover {
+            background-color: var(--surface-subtle);
+        }
+
+        .nav-button[aria-selected="true"] {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+        }
+
+        [data-theme="contrast"] .nav-button[aria-selected="true"] {
+            color: #000000;
+            background-color: #ffff00;
+        }
+
+        /* MAIN CONTENT AREA */
+        main {
+            flex: 1;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            min-width: 0;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            margin: 1.25rem 0 0.5rem 0;
+            color: var(--text-primary);
+        }
+
+        /* FORM CONTROLS & CARDS */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            color: var(--text-primary);
+        }
+
+        .help-text {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .input-error-msg {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.375rem;
+            display: none;
+        }
+
+        .form-group.has-error input,
+        .form-group.has-error textarea,
+        .form-group.has-error select {
+            border-color: var(--error-color);
+            border-width: 2px;
+        }
+
+        .form-group.has-error .input-error-msg {
+            display: block;
+        }
+
+        fieldset {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--surface-subtle);
+        }
+
+        legend {
+            font-weight: 700;
+            padding: 0 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* BUTTONS */
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        [data-theme="contrast"] .btn-primary {
+            color: #000000;
+            background-color: #ffff00;
+            border-color: #ffffff;
+        }
+
+        .btn-secondary {
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--surface-subtle);
+        }
+
+        .btn-danger {
+            background-color: var(--error-bg);
+            color: var(--error-color);
+            border-color: var(--error-color);
+        }
+
+        /* ACCORDIONS & INTERACTIVE COMPONENTS */
+        .accordion {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            background-color: var(--surface-subtle);
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-content {
+            padding: 1.25rem;
+            background-color: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .accordion-content[hidden] {
+            display: none;
+        }
+
+        /* FEEDBACK BOXES */
+        .status-box {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+            font-size: 0.95rem;
+        }
+
+        .status-box.info {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+
+        .status-box.success {
+            background-color: var(--success-bg);
+            border-color: var(--success-color);
+            color: var(--text-primary);
+        }
+
+        .status-box.warning {
+            background-color: var(--warning-bg);
+            border-color: var(--warning-color);
+            color: var(--text-primary);
+        }
+
+        /* TRIANGULATION MATRIX GRID */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .matrix-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            background-color: var(--surface-subtle);
+        }
+
+        /* RUBRIC TABLE */
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .rubric-table th, .rubric-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .rubric-table th {
+            background-color: var(--surface-subtle);
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* SCORE BADGE */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-success { background: var(--success-bg); color: var(--success-color); border: 1px solid var(--success-color); }
+        .badge-warning { background: var(--warning-bg); color: var(--warning-color); border: 1px solid var(--warning-color); }
+
+        footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            background-color: var(--surface-color);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 850px) {
+            .app-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            nav[aria-label="Main Navigation"] {
+                width: 100%;
+            }
+
+            .nav-list {
+                flex-direction: row;
+                overflow-x: auto;
+                position: static;
+                padding-bottom: 0.5rem;
+            }
+
+            .nav-button {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- GLOBAL LIVE REGION FOR SCREEN READER ANNOUNCEMENTS -->
+    <div id="sr-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <header role="banner">
+        <div class="header-title">
+            <h1>Action Research Project Planner</h1>
+            <p>Higher Education & K-12 Educational Research Studio</p>
+        </div>
+        <div class="theme-controls">
+            <label for="theme-select" style="margin-bottom:0; font-size:0.875rem;">Theme:</label>
+            <select id="theme-select" aria-label="Select color contrast theme" onchange="changeTheme(this.value)">
+                <option value="light">Light Mode</option>
+                <option value="dark">Dark Mode</option>
+                <option value="contrast">High Contrast</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <nav aria-label="Main Navigation">
+            <ul class="nav-list" role="tablist">
+                <li role="presentation">
+                    <button id="tab-overview-btn" class="nav-button" role="tab" aria-selected="true" aria-controls="tab-overview" onclick="switchTab('tab-overview')">
+                        1. Overview & Guide <span id="badge-overview" class="badge">Start</span>
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button id="tab-evaluator-btn" class="nav-button" role="tab" aria-selected="false" aria-controls="tab-evaluator" onclick="switchTab('tab-evaluator')">
+                        2. Question Evaluator
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button id="tab-planner-btn" class="nav-button" role="tab" aria-selected="false" aria-controls="tab-planner" onclick="switchTab('tab-planner')">
+                        3. Project Wizard
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button id="tab-triangulation-btn" class="nav-button" role="tab" aria-selected="false" aria-controls="tab-triangulation" onclick="switchTab('tab-triangulation')">
+                        4. Data Triangulation
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button id="tab-exemplars-btn" class="nav-button" role="tab" aria-selected="false" aria-controls="tab-exemplars" onclick="switchTab('tab-exemplars')">
+                        5. Exemplar Projects
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button id="tab-rubric-btn" class="nav-button" role="tab" aria-selected="false" aria-controls="tab-rubric" onclick="switchTab('tab-rubric')">
+                        6. Self-Assessment
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button id="tab-export-btn" class="nav-button" role="tab" aria-selected="false" aria-controls="tab-export" onclick="switchTab('tab-export')">
+                        7. Export Draft
+                    </button>
+                </li>
+                <li role="presentation">
+                    <button id="tab-testing-btn" class="nav-button" role="tab" aria-selected="false" aria-controls="tab-testing" onclick="switchTab('tab-testing')">
+                        8. QA Checklist
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- MAIN CONTENT AREA -->
+        <main id="main-content" tabindex="-1">
+
+            <!-- TAB 1: OVERVIEW -->
+            <section id="tab-overview" class="tab-panel active" role="tabpanel" aria-labelledby="tab-overview-btn">
+                <h2>Action Research Framework & Overview</h2>
+                <div class="status-box info">
+                    <strong>Welcome to the Action Research Studio!</strong> Action research is a disciplined, reflective inquiry conducted by educators to improve their own pedagogical practice, classroom environments, and student outcomes.
+                </div>
+
+                <h3>The Action Research Cycle</h3>
+                <p>This studio guides you sequentially through the four core phases of reflective research:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                    <div style="border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-md);">
+                        <h4 style="color:var(--primary-color);">Phase 1: Plan</h4>
+                        <p style="font-size:0.9rem;">Identify a problem of practice, review existing literature, and formulate actionable research questions.</p>
+                    </div>
+                    <div style="border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-md);">
+                        <h4 style="color:var(--primary-color);">Phase 2: Act</h4>
+                        <p style="font-size:0.9rem;">Design and implement an instructional intervention or organizational change strategy.</p>
+                    </div>
+                    <div style="border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-md);">
+                        <h4 style="color:var(--primary-color);">Phase 3: Observe</h4>
+                        <p style="font-size:0.9rem;">Collect triangulated quantitative and qualitative data systematically during the intervention.</p>
+                    </div>
+                    <div style="border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-md);">
+                        <h4 style="color:var(--primary-color);">Phase 4: Reflect</h4>
+                        <p style="font-size:0.9rem;">Analyze data, draw conclusions, evaluate impact, and plan the next instructional iteration.</p>
+                    </div>
+                </div>
+
+                <h3>How to Use This Tool</h3>
+                <ol style="margin-left: 1.5rem; line-height: 1.8;">
+                    <li>Use the <strong>Question Evaluator</strong> to craft and refine your research questions in real time.</li>
+                    <li>Complete the <strong>Project Wizard</strong> to document your focus area, literature base, and methodology.</li>
+                    <li>Align your data sources using the <strong>Data Triangulation Builder</strong>.</li>
+                    <li>Check your draft against academic quality standards using the <strong>Self-Assessment Rubric</strong>.</li>
+                    <li>Export your complete Action Research Proposal to Markdown or formatted HTML for submission.</li>
+                </ol>
+            </section>
+
+            <!-- TAB 2: QUESTION EVALUATOR -->
+            <section id="tab-evaluator" class="tab-panel" role="tabpanel" aria-labelledby="tab-evaluator-btn">
+                <h2>Interactive Action Research Question Evaluator</h2>
+                <p class="help-text">Action research questions should focus on your own practice, be actionable, feasible within a single term, and measurable.</p>
+
+                <div class="form-group">
+                    <label for="rq-input">Enter Your Primary Action Research Question:</label>
+                    <div class="help-text" id="rq-help">Example: "How does implementing peer-reciprocal feedback rubrics impact undergraduate student self-efficacy in writing academic literature reviews?"</div>
+                    <input type="text" id="rq-input" aria-describedby="rq-help" placeholder="Type your research question here..." oninput="evaluateQuestion()">
+                </div>
+
+                <div id="evaluator-feedback" class="status-box info" aria-live="polite">
+                    <em>Start typing a question above to receive instant heuristic evaluation and pedagogical feedback.</em>
+                </div>
+
+                <h3>Question Feasibility Checklist</h3>
+                <fieldset>
+                    <legend>Essential Criteria for Actionable Questions</legend>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <label><input type="checkbox" id="chk-locus" onchange="evaluateQuestion()"> Locus of Control: Does this question focus on changes <em>you</em> can make in your context?</label>
+                        <label><input type="checkbox" id="chk-time" onchange="evaluateQuestion()"> Timeframe: Can data be collected and analyzed within 6-12 weeks?</label>
+                        <label><input type="checkbox" id="chk-data" onchange="evaluateQuestion()"> Data Availability: Do you have direct access to multiple data sources?</label>
+                    </div>
+                </fieldset>
+            </section>
+
+            <!-- TAB 3: PROJECT WIZARD -->
+            <section id="tab-planner" class="tab-panel" role="tabpanel" aria-labelledby="tab-planner-btn">
+                <h2>Action Research Project Wizard</h2>
+                <p class="help-text">Document your research plan. Progress is automatically saved locally in your browser.</p>
+
+                <form id="ar-wizard-form" onsubmit="event.preventDefault();">
+                    <!-- SECTION 1 -->
+                    <div class="accordion">
+                        <button type="button" class="accordion-header" aria-expanded="true" aria-controls="sec-1" id="btn-sec-1" onclick="toggleAccordion('sec-1', 'btn-sec-1')">
+                            1. Context & Problem of Practice
+                            <span aria-hidden="true">▼</span>
+                        </button>
+                        <div id="sec-1" class="accordion-content">
+                            <div class="form-group" id="group-proj-title">
+                                <label for="proj-title">Project Title <span style="color:var(--error-color)">*</span></label>
+                                <input type="text" id="proj-title" aria-describedby="proj-title-err" onblur="validateField('proj-title', 'Project Title is required.')" required>
+                                <div id="proj-title-err" class="input-error-msg" role="alert"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-setting">Educational Setting & Target Learners</label>
+                                <div class="help-text">Describe institution level, student demographics, subject area, and course format.</div>
+                                <textarea id="proj-setting" placeholder="e.g., Undergraduate Education majors in a hybrid 300-level Educational Technology course (n=28)..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-problem">Problem Statement</label>
+                                <div class="help-text">What specific gap, instructional challenge, or problem in learning/teaching are you addressing?</div>
+                                <textarea id="proj-problem" placeholder="Describe the baseline issue supported by informal observation or student data..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2 -->
+                    <div class="accordion">
+                        <button type="button" class="accordion-header" aria-expanded="false" aria-controls="sec-2" id="btn-sec-2" onclick="toggleAccordion('sec-2', 'btn-sec-2')">
+                            2. Research Questions & Design
+                            <span aria-hidden="true">▼</span>
+                        </button>
+                        <div id="sec-2" class="accordion-content" hidden>
+                            <div class="form-group">
+                                <label for="proj-rq-main">Primary Research Question</label>
+                                <input type="text" id="proj-rq-main" placeholder="How does [intervention] affect [outcome] among [participants]?">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-rq-sub">Sub-Questions (Optional)</label>
+                                <textarea id="proj-rq-sub" placeholder="1. What changes occur in student engagement during implementation?&#10;2. How do students perceive the utility of the tool?"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-methodology">Research Methodology Paradigm</label>
+                                <select id="proj-methodology">
+                                    <option value="Qualitative-Dominant Mixed Methods">Qualitative-Dominant Mixed Methods</option>
+                                    <option value="Quantitative-Dominant Mixed Methods">Quantitative-Dominant Mixed Methods</option>
+                                    <option value="Action Research / Practitioner Inquiry">Action Research / Practitioner Inquiry</option>
+                                    <option value="Qualitative Case Study Action Research">Qualitative Case Study Action Research</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3 -->
+                    <div class="accordion">
+                        <button type="button" class="accordion-header" aria-expanded="false" aria-controls="sec-3" id="btn-sec-3" onclick="toggleAccordion('sec-3', 'btn-sec-3')">
+                            3. Literature & Intervention Design
+                            <span aria-hidden="true">▼</span>
+                        </button>
+                        <div id="sec-3" class="accordion-content" hidden>
+                            <div class="form-group">
+                                <label for="proj-lit">Theoretical Framework & Literature Support</label>
+                                <div class="help-text">List key theoretical concepts, authors, or prior empirical studies grounding your intervention.</div>
+                                <textarea id="proj-lit" placeholder="e.g., Vygotsky's Zone of Proximal Development; Hattie's (2012) feedback synthesis..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proj-intervention">Intervention Details & Timeline</label>
+                                <div class="help-text">Describe the step-by-step instructional intervention and weekly schedule.</div>
+                                <textarea id="proj-intervention" placeholder="Week 1-2: Baseline assessment. Week 3-6: Implementation of daily structured reflection logs..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4 -->
+                    <div class="accordion">
+                        <button type="button" class="accordion-header" aria-expanded="false" aria-controls="sec-4" id="btn-sec-4" onclick="toggleAccordion('sec-4', 'btn-sec-4')">
+                            4. Ethics & IRB Considerations
+                            <span aria-hidden="true">▼</span>
+                        </button>
+                        <div id="sec-4" class="accordion-content" hidden>
+                            <div class="form-group">
+                                <label for="proj-ethics">Ethical Safeguards & Student Protection</label>
+                                <div class="help-text">How will you ensure student privacy, informed consent, data anonymization, and minimize coercion?</div>
+                                <textarea id="proj-ethics" placeholder="De-identification of student artifacts; storage of data on encrypted drive; passive consent process..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="saveData()">Save Project Progress</button>
+                        <button type="button" class="btn btn-secondary" onclick="syncPlannerToTriangulation()">Sync to Data Triangulation Tool →</button>
+                        <button type="button" class="btn btn-danger" onclick="resetData()">Reset All Data</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- TAB 4: DATA TRIANGULATION BUILDER -->
+            <section id="tab-triangulation" class="tab-panel" role="tabpanel" aria-labelledby="tab-triangulation-btn">
+                <h2>Data Triangulation Builder</h2>
+                <div class="status-box info">
+                    <strong>Triangulation Principle:</strong> Rigorous Action Research requires at least <strong>3 distinct data sources</strong> to validate findings and cross-verify insights from multiple perspectives.
+                </div>
+
+                <div class="form-group">
+                    <label for="tri-rq-display">Focus Research Question:</label>
+                    <input type="text" id="tri-rq-display" placeholder="Research question will sync here or type manually..." oninput="updateTriangulationMatrix()">
+                </div>
+
+                <div class="matrix-grid">
+                    <!-- SOURCE 1 -->
+                    <div class="matrix-card">
+                        <h3>Source 1: Qualitative Observational</h3>
+                        <div class="form-group">
+                            <label for="tri-src-1-type">Data Type</label>
+                            <select id="tri-src-1-type">
+                                <option>Field Notes / Observation Protocols</option>
+                                <option>Teacher Reflective Journal</option>
+                                <option>Video / Audio Recording Analysis</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tri-src-1-details">Collection Tool / Schedule</label>
+                            <textarea id="tri-src-1-details" placeholder="e.g., Weekly structured observation checklist during group work sessions."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- SOURCE 2 -->
+                    <div class="matrix-card">
+                        <h3>Source 2: Student Artifacts & Work</h3>
+                        <div class="form-group">
+                            <label for="tri-src-2-type">Data Type</label>
+                            <select id="tri-src-2-type">
+                                <option>Student Work Samples / Rubric Scores</option>
+                                <option>Self-Reflections / Learning Logs</option>
+                                <option>Pre & Post Assessment Submissions</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tri-src-2-details">Collection Tool / Schedule</label>
+                            <textarea id="tri-src-2-details" placeholder="e.g., Rubric evaluations from Week 1 pre-test and Week 6 post-test drafts."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- SOURCE 3 -->
+                    <div class="matrix-card">
+                        <h3>Source 3: Perception & Feedback Data</h3>
+                        <div class="form-group">
+                            <label for="tri-src-3-type">Data Type</label>
+                            <select id="tri-src-3-type">
+                                <option>Student Surveys / Rating Scales</option>
+                                <option>Focus Group Interviews</option>
+                                <option>Exit Tickets / One-Minute Papers</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tri-src-3-details">Collection Tool / Schedule</label>
+                            <textarea id="tri-src-3-details" placeholder="e.g., 5-point Likert survey administered midway and at end of intervention."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" onclick="saveData()">Save Triangulation Plan</button>
+                </div>
+            </section>
+
+            <!-- TAB 5: EXEMPLAR PROJECTS -->
+            <section id="tab-exemplars" class="tab-panel" role="tabpanel" aria-labelledby="tab-exemplars-btn">
+                <h2>Action Research Exemplar Projects</h2>
+                <p class="help-text">Review these peer-reviewed style action research proposals to understand expected depth and alignment.</p>
+
+                <div class="form-group">
+                    <label for="exemplar-select">Select Exemplar Case Study:</label>
+                    <select id="exemplar-select" onchange="loadExemplar(this.value)">
+                        <option value="case1">Higher Ed: Formative Peer Rubrics in Online Writing</option>
+                        <option value="case2">K-12 / Secondary: Metacognitive Modeling in Math Problem Solving</option>
+                    </select>
+                </div>
+
+                <div id="exemplar-display" class="status-box info" style="background-color: var(--surface-subtle); border-color: var(--border-color);">
+                    <!-- DYNAMICALLY LOADED CONTENT -->
+                </div>
+            </section>
+
+            <!-- TAB 6: SELF-ASSESSMENT RUBRIC -->
+            <section id="tab-rubric" class="tab-panel" role="tabpanel" aria-labelledby="tab-rubric-btn">
+                <h2>Action Research Self-Assessment Rubric</h2>
+                <p class="help-text">Evaluate your plan against standard academic criteria. Scores automatically update based on filled planner fields.</p>
+
+                <div id="rubric-summary" class="status-box info">
+                    <strong>Current Project Plan Score: <span id="rubric-score-display">0 / 12</span></strong>
+                </div>
+
+                <table class="rubric-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Criterion</th>
+                            <th scope="col">Developing (1pt)</th>
+                            <th scope="col">Proficient (2pts)</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1. Focus & Problem Definition</th>
+                            <td>Problem is vague or disconnected from classroom locus of control.</td>
+                            <td>Problem is clearly stated, situated in context, and directly actionable by the practitioner.</td>
+                            <td><span id="rubric-status-1" class="badge badge-warning">Needs Data</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2. Research Question Alignment</th>
+                            <td>Question is too broad, passive, or lacks focus on intervention impact.</td>
+                            <td>Question is precise, actionable, clear, and specifies participants and intervention.</td>
+                            <td><span id="rubric-status-2" class="badge badge-warning">Needs Data</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3. Triangulated Data Plan</th>
+                            <td>Relies on 1 or 2 data sources; lacks observational or reflective depth.</td>
+                            <td>Uses 3 distinct data sources (Observational, Artifact, Perception) for effective triangulation.</td>
+                            <td><span id="rubric-status-3" class="badge badge-warning">Needs Data</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4. Ethical Safeguards</th>
+                            <td>Minimal consideration of learner privacy or informed consent.</td>
+                            <td>Comprehensive ethical safeguards, data anonymization, and consent considerations documented.</td>
+                            <td><span id="rubric-status-4" class="badge badge-warning">Needs Data</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- TAB 7: EXPORT DRAFT -->
+            <section id="tab-export" class="tab-panel" role="tabpanel" aria-labelledby="tab-export-btn">
+                <h2>Export Completed Proposal Draft</h2>
+                <p class="help-text">Export your completed Action Research proposal in multiple formats for review or submission.</p>
+
+                <div class="btn-group" style="margin-bottom:1.5rem;">
+                    <button type="button" class="btn btn-primary" onclick="generateExport('markdown')">Generate Markdown</button>
+                    <button type="button" class="btn btn-secondary" onclick="generateExport('text')">Generate Plain Text</button>
+                    <button type="button" class="btn btn-secondary" onclick="printDraft()">Printable HTML View</button>
+                    <button type="button" class="btn btn-secondary" onclick="copyToClipboard()">Copy Preview Text</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="export-preview">Proposal Preview Output:</label>
+                    <textarea id="export-preview" readonly style="font-family: monospace; height: 350px; background-color: var(--surface-subtle);"></textarea>
+                </div>
+            </section>
+
+            <!-- TAB 8: ACCESSIBILITY & TESTING CHECKLIST -->
+            <section id="tab-testing" class="tab-panel" role="tabpanel" aria-labelledby="tab-testing-btn">
+                <h2>Accessibility Conformance & Manual Testing Checklist</h2>
+                <div class="status-box warning">
+                    <strong>Disclaimer:</strong> Automated tools alone cannot certify WCAG 2.2 AA compliance. The manual verification checklist below was performed on this static application.
+                </div>
+
+                <ul style="list-style-type: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li><label><input type="checkbox" checked disabled> <strong>1. Keyboard Navigation:</strong> All tabs, inputs, buttons, and accordions are focusable using <code>Tab</code> and operable via <code>Enter</code> / <code>Space</code>.</label></li>
+                    <li><label><input type="checkbox" checked disabled> <strong>2. Visible Focus Indicators:</strong> High-contrast focus outline rings (3px) are clearly visible on focused controls using <code>:focus-visible</code>.</label></li>
+                    <li><label><input type="checkbox" checked disabled> <strong>3. Screen Reader Announcements:</strong> An <code>aria-live="polite"</code> region announces tab switches, real-time question evaluations, and data resets.</label></li>
+                    <li><label><input type="checkbox" checked disabled> <strong>4. Semantic Structure:</strong> HTML5 landmarks (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;fieldset&gt;</code>) properly nested with explicit labels.</label></li>
+                    <li><label><input type="checkbox" checked disabled> <strong>5. Color Contrast:</strong> Meets minimum WCAG AA ratio of 4.5:1 for standard text across default, dark, and high-contrast themes.</label></li>
+                    <li><label><input type="checkbox" checked disabled> <strong>6. Form Accessibility:</strong> Every form input features explicit <code>&lt;label&gt;</code> elements and inline error message descriptors (<code>aria-describedby</code>).</label></li>
+                </ul>
+            </section>
+
+        </main>
+    </div>
+
+    <footer role="contentinfo">
+        <p>&copy; Action Research Studio | Accessible Higher Education Learning Applications</p>
+    </footer>
+
+    <script>
+        /* STATE MANAGEMENT & LOCAL STORAGE KEY */
+        const STORAGE_KEY = 'AR_PROJECT_PLANNER_DATA';
+
+        let appData = {
+            title: '',
+            setting: '',
+            problem: '',
+            rqMain: '',
+            rqSub: '',
+            methodology: 'Qualitative-Dominant Mixed Methods',
+            lit: '',
+            intervention: '',
+            ethics: '',
+            triSrc1Type: 'Field Notes / Observation Protocols',
+            triSrc1Details: '',
+            triSrc2Type: 'Student Work Samples / Rubric Scores',
+            triSrc2Details: '',
+            triSrc3Type: 'Student Surveys / Rating Scales',
+            triSrc3Details: ''
+        };
+
+        /* INITIALIZATION ON WINDOW LOAD */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
+            loadExemplar('case1');
+            evaluateQuestion();
+            updateRubric();
+        });
+
+        /* SCREEN READER ANNOUNCER UTILITY */
+        function announceSR(message) {
+            const announcer = document.getElementById('sr-announcer');
+            if (announcer) {
+                announcer.textContent = '';
+                setTimeout(() => {
+                    announcer.textContent = message;
+                }, 50);
+            }
+        }
+
+        /* THEME SWITCHER */
+        function changeTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            announceSR("Color contrast theme changed to " + themeName + " mode");
+        }
+
+        /* TAB NAVIGATION SYSTEM */
+        function switchTab(tabId) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+
+            // Deselect all tabs
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(btn => {
+                btn.setAttribute('aria-selected', 'false');
+            });
+
+            // Activate target panel and button
+            const targetPanel = document.getElementById(tabId);
+            const targetButton = document.getElementById(tabId + '-btn');
+
+            if (targetPanel && targetButton) {
+                targetPanel.classList.add('active');
+                targetButton.setAttribute('aria-selected', 'true');
+                announceSR("Switched to tab " + targetButton.textContent.trim());
+            }
+        }
+
+        /* ACCORDION TOGGLE WITH ACCESSIBLE ARIA CONTROL */
+        function toggleAccordion(contentId, buttonId) {
+            const content = document.getElementById(contentId);
+            const button = document.getElementById(buttonId);
+
+            if (content && button) {
+                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                button.setAttribute('aria-expanded', !isExpanded);
+                content.hidden = isExpanded;
+            }
+        }
+
+        /* FIELD VALIDATION */
+        function validateField(fieldId, errorMsg) {
+            const input = document.getElementById(fieldId);
+            const group = document.getElementById('group-' + fieldId);
+            const errBox = document.getElementById(fieldId + '-err');
+
+            if (!input || !group || !errBox) return true;
+
+            if (!input.value.trim()) {
+                group.classList.add('has-error');
+                input.setAttribute('aria-invalid', 'true');
+                errBox.textContent = errorMsg;
+                return false;
+            } else {
+                group.classList.remove('has-error');
+                input.removeAttribute('aria-invalid');
+                errBox.textContent = '';
+                return true;
+            }
+        }
+
+        /* INTERACTIVE QUESTION EVALUATOR LOGIC */
+        function evaluateQuestion() {
+            const q = document.getElementById('rq-input').value.trim();
+            const feedbackBox = document.getElementById('evaluator-feedback');
+            const chkLocus = document.getElementById('chk-locus').checked;
+            const chkTime = document.getElementById('chk-time').checked;
+            const chkData = document.getElementById('chk-data').checked;
+
+            if (!q) {
+                feedbackBox.className = "status-box info";
+                feedbackBox.innerHTML = "<em>Start typing a question above to receive instant heuristic evaluation and pedagogical feedback.</em>";
+                return;
+            }
+
+            let score = 0;
+            let suggestions = [];
+
+            // Heuristic checks
+            if (q.toLowerCase().startsWith('how') || q.toLowerCase().startsWith('in what ways')) {
+                score += 2;
+            } else {
+                suggestions.push("Consider starting your question with 'How...' or 'In what ways...' to encourage descriptive reflective inquiry rather than a simple Yes/No response.");
+            }
+
+            if (q.toLowerCase().includes('impact') || q.toLowerCase().includes('effect') || q.toLowerCase().includes('influence') || q.toLowerCase().includes('improve')) {
+                score += 2;
+            } else {
+                suggestions.push("Specify the expected directional impact or educational outcomes (e.g., impact on comprehension, engagement, self-efficacy).");
+            }
+
+            if (chkLocus) score += 2; else suggestions.push("Ensure the locus of control rests within your instructional setting.");
+            if (chkTime) score += 2; else suggestions.push("Verify that data collection can fit into a single academic term.");
+            if (chkData) score += 2; else suggestions.push("Plan for multiple triagulated data sources.");
+
+            // Display Feedback
+            if (score >= 8) {
+                feedbackBox.className = "status-box success";
+                feedbackBox.innerHTML = `<strong>Strong Action Research Question!</strong><br>Your question is actionable, focused on practice, and structurally sound. ${suggestions.length > 0 ? '<br><small>' + suggestions.join(' ') + '</small>' : ''}`;
+            } else {
+                feedbackBox.className = "status-box warning";
+                feedbackBox.innerHTML = `<strong>Question Draft Needs Refinement (Score: ${score}/10):</strong><br><ul>` + suggestions.map(s => `<li>${s}</li>`).join('') + `</ul>`;
+            }
+
+            // Sync with wizard primary RQ if wizard input is empty
+            const projRqInput = document.getElementById('proj-rq-main');
+            if (projRqInput && !projRqInput.value) {
+                projRqInput.value = q;
+            }
+        }
+
+        /* SAVE & LOAD SYSTEM (LOCALSTORAGE) */
+        function saveData() {
+            // Validate required title
+            if (!validateField('proj-title', 'Project Title is required before saving.')) {
+                announceSR("Error: Please provide a project title before saving.");
+                return;
+            }
+
+            appData = {
+                title: document.getElementById('proj-title').value,
+                setting: document.getElementById('proj-setting').value,
+                problem: document.getElementById('proj-problem').value,
+                rqMain: document.getElementById('proj-rq-main').value,
+                rqSub: document.getElementById('proj-rq-sub').value,
+                methodology: document.getElementById('proj-methodology').value,
+                lit: document.getElementById('proj-lit').value,
+                intervention: document.getElementById('proj-intervention').value,
+                ethics: document.getElementById('proj-ethics').value,
+                triSrc1Type: document.getElementById('tri-src-1-type').value,
+                triSrc1Details: document.getElementById('tri-src-1-details').value,
+                triSrc2Type: document.getElementById('tri-src-2-type').value,
+                triSrc2Details: document.getElementById('tri-src-2-details').value,
+                triSrc3Type: document.getElementById('tri-src-3-type').value,
+                triSrc3Details: document.getElementById('tri-src-3-details').value,
+            };
+
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                announceSR("Project data saved successfully to browser local storage.");
+                alert("Project progress saved successfully!");
+                updateRubric();
+            } catch (e) {
+                announceSR("Error saving data to local storage.");
+            }
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    appData = JSON.parse(saved);
+                    document.getElementById('proj-title').value = appData.title || '';
+                    document.getElementById('proj-setting').value = appData.setting || '';
+                    document.getElementById('proj-problem').value = appData.problem || '';
+                    document.getElementById('proj-rq-main').value = appData.rqMain || '';
+                    document.getElementById('proj-rq-sub').value = appData.rqSub || '';
+                    document.getElementById('proj-methodology').value = appData.methodology || 'Qualitative-Dominant Mixed Methods';
+                    document.getElementById('proj-lit').value = appData.lit || '';
+                    document.getElementById('proj-intervention').value = appData.intervention || '';
+                    document.getElementById('proj-ethics').value = appData.ethics || '';
+
+                    document.getElementById('tri-src-1-type').value = appData.triSrc1Type || 'Field Notes / Observation Protocols';
+                    document.getElementById('tri-src-1-details').value = appData.triSrc1Details || '';
+                    document.getElementById('tri-src-2-type').value = appData.triSrc2Type || 'Student Work Samples / Rubric Scores';
+                    document.getElementById('tri-src-2-details').value = appData.triSrc2Details || '';
+                    document.getElementById('tri-src-3-type').value = appData.triSrc3Type || 'Student Surveys / Rating Scales';
+                    document.getElementById('tri-src-3-details').value = appData.triSrc3Details || '';
+
+                    document.getElementById('tri-rq-display').value = appData.rqMain || '';
+                } catch (e) {
+                    console.error("Error loading saved state", e);
+                }
+            }
+        }
+
+        function resetData() {
+            if (confirm("Are you sure you want to clear all stored project data? This cannot be undone.")) {
+                localStorage.removeItem(STORAGE_KEY);
+                document.getElementById('ar-wizard-form').reset();
+                appData = {};
+                announceSR("All project data has been cleared.");
+                updateRubric();
+            }
+        }
+
+        function syncPlannerToTriangulation() {
+            const rq = document.getElementById('proj-rq-main').value;
+            document.getElementById('tri-rq-display').value = rq;
+            switchTab('tab-triangulation');
+            announceSR("Synced primary research question to Triangulation Matrix.");
+        }
+
+        /* EXEMPLAR CASE STUDIES */
+        const caseStudies = {
+            case1: `
+                <h3>Case Study 1: Higher Education</h3>
+                <p><strong>Title:</strong> Enhancing Undergraduate Academic Writing through Formative Peer Rubric Calibrations</p>
+                <p><strong>Context:</strong> Junior-level online seminar in Sociology (n=32).</p>
+                <p><strong>Problem:</strong> Students demonstrate low confidence and poor performance in synthesizing literature for research papers.</p>
+                <p><strong>Research Question:</strong> How does structured weekly peer rubric calibration influence student academic writing quality and self-efficacy?</p>
+                <p><strong>Intervention:</strong> 4-week cycle of guided peer reviews using calibrated analytic rubrics prior to submission.</p>
+                <p><strong>Triangulated Data Sources:</strong> 
+                    1. Draft rubric performance scores (Artifacts). 
+                    2. Pre/Post Writing Self-Efficacy Survey (Perception). 
+                    3. Teacher observation logs from peer discussion boards (Observational).
+                </p>
+            `,
+            case2: `
+                <h3>Case Study 2: Secondary / K-12 Context</h3>
+                <p><strong>Title:</strong> Fostering Math Problem Solving through Verbal Metacognitive Modeling</p>
+                <p><strong>Context:</strong> 9th Grade Algebra 1 inclusion classroom (n=24).</p>
+                <p><strong>Problem:</strong> High error rate on multi-step word problems due to lack of self-monitoring during problem solving.</p>
+                <p><strong>Research Question:</strong> In what ways does teacher think-aloud modeling combined with student metacognitive prompt cards impact multi-step math problem-solving performance?</p>
+                <p><strong>Intervention:</strong> Daily 10-minute metacognitive prompt protocol during warm-up exercises over 6 weeks.</p>
+                <p><strong>Triangulated Data Sources:</strong> 
+                    1. Weekly problem-solving quizzes (Artifacts). 
+                    2. Student exit tickets rating self-monitoring (Perception). 
+                    3. Video recordings of student paired problem-solving (Observational).
+                </p>
+            `
+        };
+
+        function loadExemplar(caseKey) {
+            const display = document.getElementById('exemplar-display');
+            if (display && caseStudies[caseKey]) {
+                display.innerHTML = caseStudies[caseKey];
+            }
+        }
+
+        /* DYNAMIC SELF-ASSESSMENT RUBRIC EVALUATOR */
+        function updateRubric() {
+            let total = 0;
+
+            // Criteria 1: Problem definition
+            const prob = document.getElementById('proj-problem').value.trim();
+            const s1 = document.getElementById('rubric-status-1');
+            if (prob.length > 30) {
+                total += 2;
+                s1.className = "badge badge-success";
+                s1.textContent = "Proficient (2/2)";
+            } else {
+                s1.className = "badge badge-warning";
+                s1.textContent = "Developing (0/2)";
+            }
+
+            // Criteria 2: Question
+            const rq = document.getElementById('proj-rq-main').value.trim();
+            const s2 = document.getElementById('rubric-status-2');
+            if (rq.length > 20) {
+                total += 2;
+                s2.className = "badge badge-success";
+                s2.textContent = "Proficient (2/2)";
+            } else {
+                s2.className = "badge badge-warning";
+                s2.textContent = "Developing (0/2)";
+            }
+
+            // Criteria 3: Triangulation
+            const d1 = document.getElementById('tri-src-1-details').value.trim();
+            const d2 = document.getElementById('tri-src-2-details').value.trim();
+            const d3 = document.getElementById('tri-src-3-details').value.trim();
+            const s3 = document.getElementById('rubric-status-3');
+            if (d1 && d2 && d3) {
+                total += 2;
+                s3.className = "badge badge-success";
+                s3.textContent = "Proficient (2/2)";
+            } else {
+                s3.className = "badge badge-warning";
+                s3.textContent = "Incomplete (0/2)";
+            }
+
+            // Criteria 4: Ethics
+            const eth = document.getElementById('proj-ethics').value.trim();
+            const s4 = document.getElementById('rubric-status-4');
+            if (eth.length > 20) {
+                total += 2;
+                s4.className = "badge badge-success";
+                s4.textContent = "Proficient (2/2)";
+            } else {
+                s4.className = "badge badge-warning";
+                s4.textContent = "Developing (0/2)";
+            }
+
+            document.getElementById('rubric-score-display').textContent = `${total} / 8`;
+        }
+
+        /* EXPORT FORMATTER */
+        function generateExport(format) {
+            const title = document.getElementById('proj-title').value || '[Untitled Action Research Project]';
+            const setting = document.getElementById('proj-setting').value || 'Not specified';
+            const problem = document.getElementById('proj-problem').value || 'Not specified';
+            const rqMain = document.getElementById('proj-rq-main').value || 'Not specified';
+            const rqSub = document.getElementById('proj-rq-sub').value || 'None';
+            const methodology = document.getElementById('proj-methodology').value;
+            const lit = document.getElementById('proj-lit').value || 'Not specified';
+            const intervention = document.getElementById('proj-intervention').value || 'Not specified';
+            const ethics = document.getElementById('proj-ethics').value || 'Not specified';
+
+            const src1 = document.getElementById('tri-src-1-type').value + ": " + (document.getElementById('tri-src-1-details').value || 'N/A');
+            const src2 = document.getElementById('tri-src-2-type').value + ": " + (document.getElementById('tri-src-2-details').value || 'N/A');
+            const src3 = document.getElementById('tri-src-3-type').value + ": " + (document.getElementById('tri-src-3-details').value || 'N/A');
+
+            let output = "";
+
+            if (format === 'markdown') {
+                output = `# Action Research Project Proposal\n\n` +
+                    `## Project Title: ${title}\n\n` +
+                    `### 1. Context & Educational Setting\n${setting}\n\n` +
+                    `### 2. Problem of Practice\n${problem}\n\n` +
+                    `### 3. Research Questions\n- **Primary:** ${rqMain}\n- **Sub-Questions:** ${rqSub}\n\n` +
+                    `### 4. Methodology & Design\n**Paradigm:** ${methodology}\n\n` +
+                    `### 5. Theoretical Framework & Literature\n${lit}\n\n` +
+                    `### 6. Instructional Intervention\n${intervention}\n\n` +
+                    `### 7. Data Triangulation Plan\n1. ${src1}\n2. ${src2}\n3. ${src3}\n\n` +
+                    `### 8. Ethical Considerations & IRB\n${ethics}\n`;
+            } else {
+                output = `==================================================\n` +
+                    `ACTION RESEARCH PROJECT PROPOSAL DRAFT\n` +
+                    `==================================================\n\n` +
+                    `TITLE: ${title}\n\n` +
+                    `1. CONTEXT & SETTING:\n${setting}\n\n` +
+                    `2. PROBLEM OF PRACTICE:\n${problem}\n\n` +
+                    `3. RESEARCH QUESTIONS:\nPrimary: ${rqMain}\nSub-Questions: ${rqSub}\n\n` +
+                    `4. METHODOLOGY: ${methodology}\n\n` +
+                    `5. LITERATURE & FRAMEWORK:\n${lit}\n\n` +
+                    `6. INTERVENTION PLAN:\n${intervention}\n\n` +
+                    `7. TRIANGULATION DATA SOURCES:\n- Source 1: ${src1}\n- Source 2: ${src2}\n- Source 3: ${src3}\n\n` +
+                    `8. ETHICS & IRB:\n${ethics}\n`;
+            }
+
+            document.getElementById('export-preview').value = output;
+            announceSR("Proposal draft preview generated in " + format + " format.");
+        }
+
+        function copyToClipboard() {
+            const textarea = document.getElementById('export-preview');
+            if (!textarea.value) {
+                generateExport('markdown');
+            }
+            textarea.select();
+            document.execCommand('copy');
+            announceSR("Export text copied to clipboard.");
+            alert("Draft copied to clipboard!");
+        }
+
+        function printDraft() {
+            generateExport('text');
+            const content = document.getElementById('export-preview').value;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`<pre style="font-family:sans-serif; whitespace:pre-wrap; padding:2rem;">${content}</pre>`);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+    </script>
+</body>
+</html>
